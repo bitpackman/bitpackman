@@ -41,8 +41,7 @@
 
 ## 🕹️ STATS SCREEN
 
-<img src="https://github-readme-stats.vercel.app/api?username=bitpackman&show_icons=true&bg_color=000000&title_color=FFE400&text_color=FFFFFF&icon_color=00FFFF&border_color=2121DE&rank_icon=github" alt="GitHub Stats" height="165">
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=bitpackman&layout=compact&bg_color=000000&title_color=FFE400&text_color=FFFFFF&border_color=2121DE" alt="Top Languages" height="165">
+<img src="https://streak-stats.demolab.com?user=bitpackman&background=000000&border=2121DE&stroke=FFE400&ring=FFE400&fire=FF0000&currStreakNum=FFFFFF&sideNums=FFE400&currStreakLabel=00FFFF&sideLabels=FFB8FF&dates=FFFFFF" alt="GitHub Streak" height="180">
 
 </div>
 
