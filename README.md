@@ -2,10 +2,11 @@
 
 # ᗧ···· Hi, I'm bitpackman ····ᗣᗣᗣ
 
-### `INSERT COIN TO CONTINUE`
+<img src="https://readme-typing-svg.demolab.com?font=Press+Start+2P&size=18&duration=3000&pause=800&color=FFE400&background=00000000&center=true&vCenter=true&width=600&height=50&lines=INSERT+COIN+TO+CONTINUE;READY%21+PLAYER+1;WAKA+WAKA+WAKA+WAKA" alt="INSERT COIN TO CONTINUE">
 
 ![Pac-Man](https://img.shields.io/badge/PLAYER_1-READY!-FFE400?style=for-the-badge&labelColor=000000)
 ![High Score](https://img.shields.io/badge/HIGH_SCORE-999999-00FFFF?style=for-the-badge&labelColor=000000)
+![Credits](https://komarev.com/ghpvc/?username=bitpackman&label=CREDIT&color=FFE400&style=for-the-badge)
 
 </div>
 
@@ -42,6 +43,30 @@
 ## 🕹️ STATS SCREEN
 
 <img src="https://streak-stats.demolab.com?user=bitpackman&background=000000&border=2121DE&stroke=FFE400&ring=FFE400&fire=FF0000&currStreakNum=FFFFFF&sideNums=FFE400&currStreakLabel=00FFFF&sideLabels=FFB8FF&dates=FFFFFF" alt="GitHub Streak" height="180">
+
+</div>
+
+---
+
+<div align="center">
+
+## 🌃 LEVEL 256 — 3D MAZE VIEW
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bitpackman/bitpackman/main/profile-3d-contrib/profile-night-rainbow.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/bitpackman/bitpackman/main/profile-3d-contrib/profile-green-animate.svg">
+  <img alt="3D contribution graph" src="https://raw.githubusercontent.com/bitpackman/bitpackman/main/profile-3d-contrib/profile-night-rainbow.svg" width="90%">
+</picture>
+
+</div>
+
+---
+
+<div align="center">
+
+## 📼 PLAYER DATA
+
+<img src="https://raw.githubusercontent.com/bitpackman/bitpackman/main/metrics.svg" alt="Metrics" width="90%">
 
 </div>
 
