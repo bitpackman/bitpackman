@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: lowlighter/metrics@latest
         with:
-          # 注意: METRICS_TOKEN(classic PAT)のSecret登録が必要です。
+          # METRICS_TOKEN: classic PAT (Secret登録済み 2026-07-18)。
           # 自動のGITHUB_TOKENではユーザーアカウント情報を取得できません。
           token: ${{ secrets.METRICS_TOKEN }}
           user: bitpackman
