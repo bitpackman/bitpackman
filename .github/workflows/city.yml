@@ -1,15 +1,16 @@
-name: generate 3d contribution graph
+name: build city of commits
 
 on:
-  # 毎日0:10(UTC)に再生成(pacmanの直後)
+  # 毎日0:20(UTC)に再生成(pacman/metricsの直後)
   schedule:
-    - cron: "10 0 * * *"
+    - cron: "20 0 * * *"
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - ".github/workflows/3d-contrib.yml"
+      - ".github/workflows/city.yml"
+      - "scripts/generate-city.mjs"
 
 permissions:
   contents: write
@@ -20,14 +21,17 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: yoshi389111/github-profile-3d-contrib@0.7.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Generate isometric city
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          USERNAME: ${{ github.repository_owner }}
+        run: node scripts/generate-city.mjs "${{ github.repository_owner }}"
       - name: Commit & Push generated SVGs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A profile-3d-contrib/
-          git commit -m "chore: update 3d contribution graph" || echo "no changes"
+          git add -A city/
+          git commit -m "chore: rebuild city of commits" || echo "no changes"
           git push

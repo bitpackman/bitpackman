@@ -50,13 +50,17 @@
 
 <div align="center">
 
-## 🌃 LEVEL 256 — 3D MAZE VIEW
+## 🌃 LEVEL 256 — BONUS STAGE: CITY OF COMMITS
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bitpackman/bitpackman/main/profile-3d-contrib/profile-night-rainbow.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/bitpackman/bitpackman/main/profile-3d-contrib/profile-green-animate.svg">
-  <img alt="3D contribution graph" src="https://raw.githubusercontent.com/bitpackman/bitpackman/main/profile-3d-contrib/profile-night-rainbow.svg" width="90%">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bitpackman/bitpackman/main/city/city-night.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/bitpackman/bitpackman/main/city/city-day.svg">
+  <img alt="An isometric city built from my GitHub contributions" src="https://raw.githubusercontent.com/bitpackman/bitpackman/main/city/city-night.svg" width="90%">
 </picture>
+
+`🌳 park = a day I didn't commit` · `🏢 the busier the day, the taller the tower` · `📡 the spire is my busiest day of the year`
+
+**I don't draw this city — I zone it.** Every commit is a building permit, and the skyline is just what a year of them adds up to.
 
 </div>
 
