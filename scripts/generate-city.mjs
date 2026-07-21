@@ -55,6 +55,10 @@ const THEMES = {
     roadLine: '#f2f5f8',
     grass: '#7cc46b',
     tree: ['#3f8f4a', '#4e9c50', '#357c42'],
+    dirt: ['#b5ae97', '#bdb59d', '#aba48f'],
+    weed: ['#94a06c', '#8a9663', '#a3ac7d'],
+    rubble: '#9a937f',
+    deadTree: '#8b7f68',
     water: '#5fb6e0',
     window: ['#7fc4e8', '#9ad4f0'],
     windowLit: null,
@@ -83,6 +87,10 @@ const THEMES = {
     roadLine: '#46527a',
     grass: '#162c22',
     tree: ['#153427', '#123024', '#1a4030'],
+    dirt: ['#121723', '#141a27', '#101520'],
+    weed: ['#1b2a20', '#18251d', '#1e3025'],
+    rubble: '#1c2334',
+    deadTree: '#262d3d',
     water: '#16324f',
     window: ['#ffd171', '#ffe6ab', '#ffbf47'],
     windowLit: '#6fe8ff',
@@ -269,33 +277,56 @@ function renderSVG(city, theme) {
   for (const cell of city.cells) {
     const { c, r } = cell;
     const rng = mulberry32(hashStr(`${cell.date}:${cell.count}:${T.id}`));
-    ground.push(poly(rhombus(c, r, S_SIDEWALK), T.sidewalk));
 
     if (cell.level === 0) {
-      // ---- park -----------------------------------------------------------
-      ground.push(poly(rhombus(c, r, S_PARK), T.grass));
+      // ---- vacant lot -----------------------------------------------------
+      // Nothing happened on this day, so nothing stands here. Bare earth, the
+      // odd weed, and no reason for anyone to come by.
+      ground.push(poly(rhombus(c, r, S_SIDEWALK), shade(T.sidewalk, 0.93)));
+      ground.push(poly(rhombus(c, r, S_PARK), T.dirt[Math.floor(rng() * T.dirt.length)]));
+
       const roll = rng();
-      if (roll < 0.14) {
-        ground.push(poly(rhombus(c, r, 0.2), T.water)); // pond
-      } else if (roll < 0.78) {
-        const n = 1 + Math.floor(rng() * 2);
-        let svg = '';
+      if (roll < 0.1) {
+        // a few tufts of weed pushing through
+        let d = '';
+        const n = 2 + Math.floor(rng() * 3);
         for (let i = 0; i < n; i++) {
-          const ox = (rng() - 0.5) * 0.42;
-          const oy = (rng() - 0.5) * 0.42;
-          const p = P(c + ox, r + oy);
-          const th = 5 + rng() * 4;
-          const tc = T.tree[Math.floor(rng() * T.tree.length)];
-          svg +=
-            `<path d="M${r1(p[0])},${r1(p[1])}v${-r1(th * 0.55)}" stroke="${shade(tc, 0.55)}" stroke-width="1.4"/>` +
-            `<ellipse cx="${r1(p[0])}" cy="${r1(p[1] - th * 0.75)}" rx="${r1(th * 0.62)}" ry="${r1(
-              th * 0.72
-            )}" fill="${tc}"/>`;
+          const p = P(c + (rng() - 0.5) * 0.5, r + (rng() - 0.5) * 0.5);
+          const wh = 2.5 + rng() * 2.5;
+          d += `M${r1(p[0])},${r1(p[1])}l${r1((rng() - 0.5) * 2)},${-r1(wh)}`;
         }
-        push(c + r + 0.2, svg);
+        push(
+          c + r + 0.2,
+          `<path d="${d}" stroke="${T.weed[Math.floor(rng() * T.weed.length)]}" stroke-width="1.1" fill="none"/>`
+        );
+      } else if (roll < 0.15) {
+        // rubble left over from whatever used to be here
+        let d = '';
+        for (let i = 0; i < 3; i++) {
+          const p = P(c + (rng() - 0.5) * 0.5, r + (rng() - 0.5) * 0.5);
+          const s = 1 + rng() * 1.4;
+          d += `M${r1(p[0] - s)},${r1(p[1])}l${r1(s)},${-r1(s * 0.5)}l${r1(s)},${r1(s * 0.5)}l${-r1(s)},${r1(
+            s * 0.5
+          )}Z`;
+        }
+        ground.push(`<path d="${d}" fill="${T.rubble}"/>`);
+      } else if (roll < 0.19) {
+        // one bare tree nobody planted on purpose
+        const p = P(c + (rng() - 0.5) * 0.3, r + (rng() - 0.5) * 0.3);
+        const th = 7 + rng() * 4;
+        push(
+          c + r + 0.2,
+          `<path d="M${r1(p[0])},${r1(p[1])}v${-r1(th)}m0,${r1(th * 0.4)}l${-r1(th * 0.34)},${-r1(
+            th * 0.34
+          )}m${r1(th * 0.34)},${r1(th * 0.34)}l${r1(th * 0.3)},${-r1(th * 0.4)}" stroke="${
+            T.deadTree
+          }" stroke-width="1.2" fill="none"/>`
+        );
       }
       continue;
     }
+
+    ground.push(poly(rhombus(c, r, S_SIDEWALK), T.sidewalk));
 
     // ---- building ---------------------------------------------------------
     const h = cell.h;
@@ -428,6 +459,20 @@ function renderSVG(city, theme) {
   }
 
   // -- street furniture ----------------------------------------------------
+  // Traffic and street lighting only exist where there is something to drive
+  // to, so stretches with no contributions stay dark and empty.
+  const heightAt = new Map(city.cells.map((x) => [`${x.c},${x.r}`, x.h]));
+  const activityAt = (gx, gy) => {
+    const c0 = Math.round(gx);
+    const r0 = Math.round(gy);
+    let sum = 0;
+    for (let dc = -2; dc <= 2; dc++) {
+      for (let dr = -1; dr <= 1; dr++) sum += heightAt.get(`${c0 + dc},${r0 + dr}`) || 0;
+    }
+    return sum;
+  };
+  const LIVELY = 50;
+
   const carColors =
     T.id === 'night'
       ? ['#ff5a5a', '#ffd166', '#69d2ff', '#ffffff']
@@ -435,7 +480,9 @@ function renderSVG(city, theme) {
   for (let c = 0; c < city.weeks - 1; c++) {
     for (let r = 0; r < 7; r++) {
       const rng = mulberry32(hashStr(`car:${c}:${r}:${T.id}`));
-      if (rng() > 0.09) continue;
+      const act = activityAt(c + 0.5, r);
+      if (act < LIVELY) continue;
+      if (rng() > 0.05 + Math.min(act / 900, 0.2)) continue;
       const gx = c + 0.5;
       const gy = r + (rng() - 0.5) * 0.5;
       const sx = 0.07;
@@ -464,6 +511,7 @@ function renderSVG(city, theme) {
   for (let c = 4; c < city.weeks - 1; c += 5) {
     for (const r of [2.5, 5.5]) {
       const gx = c + 0.5;
+      if (activityAt(gx, r) < LIVELY) continue;
       const p0 = P(gx, r, 0);
       const p1 = P(gx, r, 17);
       let svg = `<path d="M${r1(p0[0])},${r1(p0[1])}L${r1(p1[0])},${r1(p1[1])}" stroke="${
@@ -537,7 +585,7 @@ function renderSVG(city, theme) {
     `<text x="${MARGIN}" y="${H - 13}" font-size="10.5" fill="${T.textDim}">${label}</text>` +
     `<text x="${W - MARGIN}" y="${H - 13}" font-size="10.5" fill="${
       T.textDim
-    }" text-anchor="end">park = quiet day · taller tower = busier day</text>` +
+    }" text-anchor="end">vacant lot = a day I shipped nothing · taller tower = busier day</text>` +
     `</g>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="An isometric city generated from the GitHub contributions of ${USER}">
