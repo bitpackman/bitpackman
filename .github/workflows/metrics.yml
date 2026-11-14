@@ -14,6 +14,11 @@ on:
 permissions:
   contents: write
 
+# mainへ書き込むワークフロー同士を直列化してpush競合を防ぐ
+concurrency:
+  group: profile-main-push
+  cancel-in-progress: false
+
 jobs:
   metrics:
     runs-on: ubuntu-latest
